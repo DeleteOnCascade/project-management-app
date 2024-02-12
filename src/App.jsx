@@ -14,7 +14,7 @@ function App() {
     tasks: [null],
   };
 
-  const allProjects = [project];
+  const [allProjects, setAllProjects] = useState([project]);
 
   //si ya han creado proyectos seteamos true para que muestre el proyecto
   function handleNewProject() {
@@ -23,14 +23,16 @@ function App() {
     } else {
       setIsNewProject(true);
     }
-    console.log("mosrtar:" + isNewProject);
   }
 
   const handleSave = (e, formValues) => {
-    e.preventDefault();
-    allProjects.push(formValues);
-    console.log(allProjects);
-    // Aquí puedes hacer lo que necesites con formValues, como enviarlos a una API o guardarlos en otro estado.
+    console.log("formValues: " + JSON.stringify(formValues));
+    if (Object.keys(formValues).length === 0) {
+      e.preventDefault();
+    } else {
+      e.preventDefault();
+      setAllProjects((prevProjects) => [...prevProjects, formValues]);
+    }
   };
 
   return (
@@ -45,9 +47,7 @@ function App() {
               alt="app icon"
               width="100"
             />
-            <h2 className="text-xl font-bold text-stone-500 my-4">
-              No project selected
-            </h2>
+            <h2 className="text-xl font-bold text-stone-500 my-4">No project selected</h2>
             <p className="text-stone-400 mb-4">
               Select a project or get started with a new one
             </p>
