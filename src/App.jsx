@@ -2,11 +2,13 @@ import Logo from "./assets/no-projects.png";
 import SideMenu from "./components/SideMenu";
 import Project from "./components/Project";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
+import ProjectInfo from "./components/ProjectInfo";
 
 function App() {
   const [isNewProject, setIsNewProject] = useState(true);
-
+  const [showData, setShowData] = useState(false);
+  const index = useRef();
   const project = {
     title: "",
     desc: "",
@@ -14,6 +16,7 @@ function App() {
     tasks: [null],
   };
 
+  //const [index, setIndex] = useState(0);
   const [allProjects, setAllProjects] = useState([project]);
 
   //si ya han creado proyectos seteamos true para que muestre el proyecto
@@ -35,10 +38,32 @@ function App() {
     }
   };
 
+  function handleShowProject(projectIndex) {
+    if (showData) {
+      setShowData(false);
+      index.current = 0;
+    } else {
+      setShowData(true);
+      setIsNewProject(false);
+      //setIndex(index);
+      index.current = projectIndex;
+      console.log("handle show project: " + index.current);
+      console.log("allProjects project: " + JSON.stringify(allProjects[index.current]));
+    }
+  }
+
+  function addTasks() {
+    console.log("taks: " + allProjects[index.current].tasks);
+  }
+
   return (
     <>
       <main className="h-screen my-8 flex gap-8">
-        <SideMenu projects={allProjects} onAddNewProject={handleNewProject} />
+        <SideMenu
+          projects={allProjects}
+          onAddNewProject={handleNewProject}
+          showProject={handleShowProject}
+        />
         {isNewProject && (
           <div className="mt-24 text-center w-2/3">
             <img
@@ -59,7 +84,10 @@ function App() {
             </button>
           </div>
         )}
-        {!isNewProject && <Project handleSaveProject={handleSave} />}
+        {!isNewProject && !showData && <Project handleSaveProject={handleSave} />}
+        {showData && (
+          <ProjectInfo project={allProjects[index.current]} addTasks={addTasks} />
+        )}
       </main>
     </>
   );
