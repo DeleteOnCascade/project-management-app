@@ -9,6 +9,7 @@ function App() {
   const [isNewProject, setIsNewProject] = useState(true);
   const [showData, setShowData] = useState(false);
   const index = useRef();
+
   const project = {
     title: "",
     desc: "",
@@ -52,10 +53,6 @@ function App() {
     }
   }
 
-  function addTasks() {
-    console.log("taks: " + allProjects[index.current].tasks);
-  }
-
   return (
     <>
       <main className="h-screen my-8 flex gap-8">
@@ -85,9 +82,7 @@ function App() {
           </div>
         )}
         {!isNewProject && !showData && <Project handleSaveProject={handleSave} />}
-        {showData && (
-          <ProjectInfo project={allProjects[index.current]} addTasks={addTasks} />
-        )}
+        {showData && <ProjectInfo project={allProjects[index.current]} />}
       </main>
     </>
   );
